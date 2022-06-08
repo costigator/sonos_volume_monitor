@@ -1,2 +1,3 @@
-# sonos_volume_monitor
-Monitor and change the volume of your Sonos speakers
+# Sonos Volume Monitor
+
+Monitor and change the volume of your Sonos speakers.
