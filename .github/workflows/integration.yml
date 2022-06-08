@@ -19,5 +19,5 @@ jobs:
           docker build -t app .
           echo ${{ secrets.DOCKER_SECRET }} | docker login -u costigator --password-stdin
           docker tag app costigator/sonos_volume_monitor
-          docker push costigator/sonos_volume_monitor:tagname
+          docker push costigator/sonos_volume_monitor
   
