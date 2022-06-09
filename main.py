@@ -1,53 +1,55 @@
-import os
-from soco import discover, SoCo
+import os, sys
+from soco import SoCo
 from time import sleep
 
 
 def load_environment_variables():
     """Load environment variables"""
 
-    global ROOM
+    global IP
     global VOLUME
+    global CHECK_INTERVAL
 
-    ROOM = os.environ.get("ROOM", "Esszimmer")
+    IP = os.environ.get("IP", "192.168.1.79")
     VOLUME = int(os.environ.get("VOLUME", "50"))
+    CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "10"))
 
     print("=" * 50)
     print("Enviroment variables:")
-    print(f"ROOM: {ROOM}")
+    print(f"IP: {IP}")
     print(f"VOLUME: {VOLUME}")
+    print(f"CHECK_INTERVAL: {CHECK_INTERVAL}")
     print("=" * 50)
 
 def main():
 
     load_environment_variables()
 
-    print(f"Getting IP for Sonos {ROOM}")
+    print(f"Connecting to {IP}")
 
-    ip_address = None
-    for zone in discover():
-        print(f"{zone.player_name} - {zone.ip_address}")
-        if zone.player_name == ROOM:
-            ip_address = zone.ip_address
+    try:
+        sonos = SoCo(IP)
+        print(f"Sonos UID: {sonos.uid}")
+    except:
+        print("Could not connect to Sonos")
+        sys.exit(1)
 
-    if ip_address:
-        print(f"Connecting to {ROOM} - {ip_address}")
 
-        sonos = SoCo(ip_address)
+    while(True):
 
-        while(True):
+        try:
 
             # if TV source is active
             if sonos.music_source == "TV":
-                print(f"Setting volume to {VOLUME} to {ROOM}")
+                print(f"Setting volume to {VOLUME} to {IP}")
                 sonos.volume = 50
             else:
                 print("TV source is not active. Waiting...")
 
-            sleep(10)
+        except:
+            print("Could not set volume because of an error.")
 
-    else:
-        print("No Sonos device found. Exit.")
+        sleep(CHECK_INTERVAL)
 
 
 if __name__ == "__main__":
