@@ -2,11 +2,25 @@ import os
 from soco import discover, SoCo
 from time import sleep
 
-# variables
-ROOM = os.environ.get("ROOM", "Esszimmer")
-VOLUME = int(os.environ.get("VOLUME", "50"))
+
+def load_environment_variables():
+    """Load environment variables"""
+
+    global ROOM
+    global VOLUME
+
+    ROOM = os.environ.get("ROOM", "Esszimmer")
+    VOLUME = int(os.environ.get("VOLUME", "50"))
+
+    print("=" * 50)
+    print("Enviroment variables:")
+    print(f"ROOM: {ROOM}")
+    print(f"VOLUME: {VOLUME}")
+    print("=" * 50)
 
 def main():
+
+    load_environment_variables()
 
     print(f"Getting IP for Sonos {ROOM}")
 
@@ -34,6 +48,7 @@ def main():
 
     else:
         print("No Sonos device found. Exit.")
+
 
 if __name__ == "__main__":
     main()
